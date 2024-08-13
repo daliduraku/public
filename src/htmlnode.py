@@ -28,9 +28,23 @@ class HTMLNode:
 
 class LeafNode(HTMLNode):
     def __init__(self, tag, value, props=None):
-        super().__init__(tag, value, props)
+        super().__init__(tag, value, children=None, props=props)
     
     
     def to_html(self):
+        if self.tag == "" and (self.value in ["", None]) and not self.props:
+            raise ValueError
         
+        if self.tag is None:
+            return f"{self.value}"
         
+        conca_string = self.props_to_html()
+        
+        if self.tag != "" and self.value not in ["", None]:
+            if self.props:
+                return f'<{self.tag}{conca_string}>{self.value}</{self.tag}>'
+            else:
+                return f"<{self.tag}>{self.value}</{self.tag}>"
+            
+        elif self.tag != "" and self.value in ["", None]:
+            return f"<{self.tag}{conca_string}/>"
