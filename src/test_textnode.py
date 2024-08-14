@@ -24,7 +24,8 @@ instance_one = TextNode("Example", "bold")
 
 check_one = text_node_to_html_node(instance_one)
 assert isinstance(check_one, LeafNode)
- 
+assert check_one.tag == "b"
+
  
     
 if __name__ == "__main__":
