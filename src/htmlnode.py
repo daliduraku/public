@@ -28,7 +28,7 @@ class HTMLNode:
 
 class LeafNode(HTMLNode):
     def __init__(self, tag, value, props=None):
-        super().__init__(tag, value, children=None, props=props)
+        super().__init__(tag, value, children=None, props=props) 
     
     
     def to_html(self):
@@ -48,3 +48,22 @@ class LeafNode(HTMLNode):
             
         elif self.tag != "" and self.value in ["", None]:
             return f"<{self.tag}{conca_string}/>"
+        
+class ParentNode(HTMLNode):
+    def __init__(self,tag, children, props):
+        super().__init__(tag, value=None, children=children, props=props)
+        
+    def to_html(self):
+        if self.tag in ["", None]:
+            raise ValueError
+            
+        if len(self.children) == 0:
+            raise ValueError("Children is an empty list")
+            
+        conca_string = self.props_to_html()
+        
+        # Recursively process each child node
+        children_html = "".join([child.to_html() for child in self.children])
+
+        # Build and return the complete HTML string
+        return f'<{self.tag}{conca_string}>{children_html}</{self.tag}>'
