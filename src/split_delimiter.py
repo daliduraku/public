@@ -83,29 +83,32 @@ def split_nodes_image(old_nodes):
 
 
 def split_nodes_link(old_nodes):
-    text_type_link = "link"    
-    text_type_text = "text"
-    
-    no_links_node = []
-    new_link_node = []     
-    
-    for node in old_nodes:
-        links = extract_markdown_links(node.text)
+    new_nodes = []
+    for old_node in old_nodes:
+        if old_node.text_type != text_type_text:
+            new_nodes.append(old_node)
+            continue
         
-        if not links:
-            no_links_node.append(node)
+        original_text = old_node.text 
+        links = extract_markdown_links(original_text)
+        
+        if len(links) == 0:
+            new_nodes.append(old_node)
+            continue
+        
+        for link in links:
+            sections = original_text.split(f"[{link[0]}]({link[1]})", 1)
+            if len(sections) != 2:
+                raise ValueError("Invalid markdown, link section not closed")
             
-        else:
-            for link_alt, links_link in links:
-                sections = node.text.split(f"[{link_alt}]({links_link})", 1)
-                
-                if sections[0]:
-                    new_link_node.append(TextNode(sections[0], text_type_text))
-                    
-                new_link_node.append(TextNode(f"[{link_alt}]({links_link})", text_type_link))
-                
-                if len(sections) > 1 and sections[1]:
-                    new_link_node.append(TextNode(sections[1], text_type_text))
-    
-    return new_link_node
-    
+            if sections[0] != "":
+                new_nodes.append(TextNode(sections[0], text_type_text))
+            
+            new_nodes.append(TextNode(link[0], text_type_link, link[1]))
+            
+            original_text = sections[1]
+            
+        if original_text != "":
+            new_nodes.append(TextNode(original_text, text_type_text))
+   
+    return new_nodes
