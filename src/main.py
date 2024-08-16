@@ -1,9 +1,12 @@
-from textnode import TextNode
+from textnode import (
+    TextNode,
+    text_node_to_html_node
+)
 from htmlnode import LeafNode
 def main():
-    dummy_var = TextNode("This is a text node", "bold", "https://www.boot.dev")
-    
-    print(dummy_var)
+    node = TextNode("This is a text node", "bold", "https://www.boot.dev")
+
+    print( node )
      
 
 
