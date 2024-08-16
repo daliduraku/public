@@ -61,7 +61,31 @@ class TestSplitDelimiter(unittest.TestCase):
             new_nodes,
         )
         
-        
+    def test_delim_italic(self):
+        node = TextNode("This is text with an *italic* word", text_type_text)
+        new_nodes = split_nodes_delimiter([node], "*", text_type_italic)
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", text_type_text),
+                TextNode("italic", text_type_italic),
+                TextNode(" word", text_type_text),
+            ],
+            new_nodes,
+        )    
+    
+    def test_delim_bold_and_italic(self):
+        node = TextNode("**bold** and *italic*", text_type_text)
+        new_nodes = split_nodes_delimiter([node], "**", text_type_bold)
+        new_nodes = split_nodes_delimiter(new_nodes, "*", text_type_italic)
+        self.assertEqual(
+            [
+                TextNode("bold", text_type_bold),
+                TextNode(" and ", text_type_text),
+                TextNode("italic", text_type_italic),
+            ],
+            new_nodes,
+        )
+   
     def test_extract_markdown_links(self):
         text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
         node = extract_markdown_links(text)
