@@ -112,3 +112,19 @@ def split_nodes_link(old_nodes):
             new_nodes.append(TextNode(original_text, text_type_text))
    
     return new_nodes
+
+
+def text_to_textnodes(text):
+    # Handle images and links to avoid splitting 
+    matches_image = extract_markdown_images(text)
+    matches_link = extract_markdown_links(text)
+    
+    list_nodes = split_nodes_image(matches_image)
+    list_nodes += split_nodes_link(matches_link)
+    
+    # Handle formatting delimiters
+    list_nodes += split_nodes_delimiter(text, "**", text_type_bold)
+    list_nodes += split_nodes_delimiter(text, "*", text_type_italic)
+    list_nodes += split_nodes_delimiter(text, "`", text_type_code)
+    
+    return list_nodes
