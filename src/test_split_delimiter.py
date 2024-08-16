@@ -42,7 +42,7 @@ class TestSplitDelimiter(unittest.TestCase):
         expected_output = [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
         self.assertEqual(node, expected_output)
 
-    def test_split_image(self):
+    def test_split_image_single(self):
         node = TextNode(
             "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)",
             text_type_text,
@@ -56,7 +56,32 @@ class TestSplitDelimiter(unittest.TestCase):
             new_nodes,
         )
 
+    def test_split_image_single(self):
+        node = TextNode(
+            "![image](https://www.example.com/image.png)",
+            text_type_text,
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [TextNode("image", text_type_image, "https://www.example.com/image.png")],
+            new_nodes,
+        )
 
+    def test_split_images(self):
+        node = TextNode(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+            text_type_text,
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", text_type_text),
+                TextNode("image", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and another ", text_type_text),
+                TextNode( "second image", text_type_image, "https://i.imgur.com/3elNhQu.png"),
+            ],
+            new_nodes,
+        )
 
 
 if __name__ == '__main__':
