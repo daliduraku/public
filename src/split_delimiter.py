@@ -60,6 +60,30 @@ def split_nodes_image(old_nodes):
     
     return new_nodes
         
-         
+def split_nodes_link(old_nodes):
+    text_type_link = "link"    
+    text_type_text = "text"
     
+    no_links_node = []
+    new_link_node = []     
+    
+    for node in old_nodes:
+        links = extract_markdown_links(node.text)
+        
+        if not links:
+            no_links_node.append(node)
+            
+        else:
+            for link_alt, links_link in links:
+                sections = node.text.split(f"[{link_alt}]({links_link})", 1)
+                
+                if sections[0]:
+                    new_link_node.append(TextNode(sections[0], text_type_text))
+                    
+                new_link_node.append(TextNode(f"[{link_alt}]({links_link})", text_type_link))
+                
+                if len(sections) > 1 and sections[1]:
+                    new_link_node.append(TextNode(sections[1], text_type_text))
+    
+    return new_link_node
     
