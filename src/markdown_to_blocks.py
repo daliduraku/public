@@ -6,6 +6,13 @@ start_of_code ="```"
 start_of_line = ">"
 start_of_unordered = ("* ", "- ")
 start_of_paragraph = "paragraph"
+block_type_paragraph = "paragraph"
+block_type_heading = "heading"
+block_type_code = "code"
+block_type_quote = "quote"
+block_type_olist = "ordered_list"
+block_type_ulist = "unordered_list"
+
 
 def markdown_to_blocks(markdown):
     blank_line_regex = r"(?:\r?\n){2,}"
@@ -30,6 +37,9 @@ def markdown_to_blocks(markdown):
 
 # function takes a string in as the form single block of markdown text
 def block_to_block_type(markdown):
+    
+    if markdown == "":
+        return "empty"
 
     # checking 
     if markdown.startswith(start_of_headings):
@@ -52,6 +62,7 @@ def block_to_block_type(markdown):
 
     if all_unordered:
         return "unordered_list"
+    
     
     current_number = 1
     is_ordered = True

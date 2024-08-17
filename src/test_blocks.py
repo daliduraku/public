@@ -8,9 +8,12 @@ from markdown_to_blocks import(
     start_of_line,
     start_of_unordered,
     start_of_paragraph,
-    
-    
-    
+    block_type_code,
+    block_type_heading,
+    block_type_olist,
+    block_type_paragraph,
+    block_type_quote,
+    block_type_ulist,   
 )
 
 class TestMarkdown(unittest.TestCase):
@@ -61,18 +64,19 @@ class TestMarkdown(unittest.TestCase):
             ],
         )   
     def test_block_to_block_types(self):
-        #block = "# heading"
-        #self.assertEqual(block_to_block_type(block), start_of_headings)
+        block = "# heading"
+        self.assertEqual(block_to_block_type(block), block_type_heading)
         block = "```\ncode\n```"
-        self.assertEqual(block_to_block_type(block), start_of_code)
+        self.assertEqual(block_to_block_type(block), block_type_code)
         block = "> quote\n> more quote"
-        self.assertEqual(block_to_block_type(block), start_of_line)
+        self.assertEqual(block_to_block_type(block), block_type_quote)
         block = "* list\n* items"
-        self.assertEqual(block_to_block_type(block), start_of_unordered)
-        #block = "1. list\n2. items"
-        #self.assertEqual(block_to_block_type(block), block_type_olist)
+        self.assertEqual(block_to_block_type(block), block_type_ulist)
+        block = "1. list\n2. items"
+        self.assertEqual(block_to_block_type(block), block_type_olist)
         block = "paragraph"
-        self.assertEqual(block_to_block_type(block), start_of_paragraph)    
+        self.assertEqual(block_to_block_type(block), block_type_paragraph)
+       
 if __name__ == "__main__":
     unittest.main()      
         
