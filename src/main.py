@@ -1,20 +1,20 @@
-from textnode import (
-    TextNode,
-    text_node_to_html_node
-)
-from htmlnode import LeafNode
+import os
+import shutil
+
+from copystatic import copy_files_recursive
+
+
+dir_path_static = "./static"
+dir_path_public = "./public"
+
+
 def main():
-    node = TextNode("This is a text node", "bold", "https://www.boot.dev")
+    print("Deleting public directory...")
+    if os.path.exists(dir_path_public):
+        shutil.rmtree(dir_path_public)
 
-    print( node )
-     
-
-
-
-
+    print("Copying static files to public directory...")
+    copy_files_recursive(dir_path_static, dir_path_public)
 
 
-
-
-if __name__ == "__main__":
-    main()
+main()
