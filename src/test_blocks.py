@@ -1,19 +1,15 @@
 import unittest
 import re
 from markdown_to_blocks import(
+    markdown_to_html_node,
     markdown_to_blocks,
     block_to_block_type,
-    start_of_code,
-    start_of_headings,
-    start_of_line,
-    start_of_unordered,
-    start_of_paragraph,
-    block_type_code,
-    block_type_heading,
-    block_type_olist,
     block_type_paragraph,
-    block_type_quote,
-    block_type_ulist,   
+    block_type_heading,
+    block_type_code,
+    block_type_olist,
+    block_type_ulist,
+    block_type_quote,   
 )
 
 class TestMarkdown(unittest.TestCase):
@@ -76,7 +72,44 @@ class TestMarkdown(unittest.TestCase):
         self.assertEqual(block_to_block_type(block), block_type_olist)
         block = "paragraph"
         self.assertEqual(block_to_block_type(block), block_type_paragraph)
-       
+    
+    def test_paragraph(self):
+        
+        md = """
+        This is **bolded** paragraph
+        text in a p
+        tag here
+
+        """
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p></div>",
+        )
+    
+    def test_paragraphs(self):
+        md = """
+        This is **bolded** paragraph
+        text in a p
+        tag here
+
+        This is another paragraph with *italic* text and `code` here
+
+        """
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
+             
+
+
+
+
 if __name__ == "__main__":
     unittest.main()      
         
